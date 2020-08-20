@@ -34,21 +34,12 @@ class RepositoryK {
     class TaskForApi(deligate: AsyncResponse) : AsyncTask<Void, Void, Void>(){
         lateinit var modelData : Model
         var asyncResponse = deligate
+        var retrofitUtility = RetrofitUtility()
         override fun doInBackground(vararg p0: Void?): Void? {
 
 
-            val gson = GsonBuilder()
-                .setLenient()
-                .create()
+            var call = retrofitUtility.initializeApi()
 
-            val retrofit = Retrofit.Builder()
-                .baseUrl("https://jsonplaceholder.typicode.com/todos/")
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build()
-
-            val request: RetrofitInterface =
-                retrofit.create<RetrofitInterface>(RetrofitInterface::class.java)
-            val call: Call<Model?>? = request.getJSON()
 
             call?.enqueue(object : Callback<Model?> {
                 override fun onFailure(call: Call<Model?>, t: Throwable) {
